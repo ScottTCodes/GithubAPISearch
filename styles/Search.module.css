@@ -1,0 +1,35 @@
+.search__container {
+  max-width: 800px;
+  position: relative;
+}
+
+.search__bar {
+  border: 0;
+  outline: none;
+  padding: 5px 30px;
+  height: 40px;
+  width: 100%;
+  border-radius: 40px;
+}
+
+.search__button {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  padding: 5px 20px 5px 5px;
+  background: none;
+  border: 0;
+  outline: none;
+  transition: 200ms opacity ease-in-out;
+}
+
+.search__button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .search__button {
+    right: 40px;
+  }
+}

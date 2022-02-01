@@ -1,8 +1,7 @@
 import React from 'react'
-import type { NextPage, GetStaticProps, InferGetStaticPropsType } from 'next'
+import type { NextPage, GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 
-import Search from '../components/search'
 import Repository, { IRepository } from '../components/repository'
 import { server } from '../config/index'
 
@@ -13,19 +12,17 @@ interface Repos {
   repos: IRepository;
 }
 
-const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Search: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { repos } = props;
 
   return (
     <>
       <Head>
-        <title>Github API Search</title>
-        <meta name="description" content="Arctic Shores Technical test by Scott Taylor" />
+        <title>Github Search Results</title>
+        <meta name="description" content="Search results from the Github API" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <Search />
-        <h2 className={styles.header}>Top Starred Repositories</h2>
         <section className={`container ${repositoryStyles.results__grid}`}>
           {repos && repos.map((item: IRepository, index: number) => <Repository key={index} {...item} />)}
         </section>
@@ -34,13 +31,12 @@ const Home: NextPage = (props: InferGetStaticPropsType<typeof getStaticProps>) =
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const res = await fetch(`${server}/api/github`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      q: 'stars:>=10000',
-      sort: 'stars'
+      q: query.query
     })
   })
   const repos: Repos = await res.json()
@@ -52,4 +48,4 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 }
 
-export default Home
+export default Search
